@@ -22,17 +22,17 @@
             app:navigationIcon="@mipmap/ic_menu"/>
     </android.support.design.widget.AppBarLayout>
 
-    <com.jerey.keepgank.View.SwipeToRefreshLayout
+    <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_ly"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/normal_background_grey"
-        android:layout_marginTop="?attr/actionBarSize">
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="vertical"
+        >
 
-        <android.support.v7.widget.RecyclerView
+    <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </com.jerey.keepgank.View.SwipeToRefreshLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </android.support.design.widget.CoordinatorLayout>
