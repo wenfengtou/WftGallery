@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,8 +58,10 @@ public class HomeFragment extends Fragment {
         mAdapter = new HomeAdapter(getActivity());
         mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view);
         mSwipeRefreshLayout =(SwipeRefreshLayout) getActivity().findViewById(R.id.swipe_ly);
-        mToolBar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        //mToolBar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,
+                StaggeredGridLayoutManager.VERTICAL));
+        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setAdapter(mAdapter);
         loadData(1);

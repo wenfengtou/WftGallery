@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,9 +29,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     private List<Result> mDatas;
     private Context mContext;
+    private List<Integer> heightList;//装产出的随机数
     public  HomeAdapter(Context context){
         mContext = context;
         mDatas = new ArrayList<>();
+        //记录为每个控件产生的随机高度,避免滑回到顶部出现空白
+        heightList = new ArrayList<>();
    }
 
     @Override
@@ -44,6 +48,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Log.i("wenfeng","onBindViewHolder");
+        ViewGroup.LayoutParams layoutParams = holder.imageView.getLayoutParams();
+        layoutParams.height = heightList.get(position);
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        holder.imageView.setLayoutParams(layoutParams);
         final Result data = mDatas.get(position);
         if(data.getUrl() != null) {
             Glide.with(mContext)
@@ -68,6 +76,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     public void addData(List<Result> datas) {
         Log.i("wenfeng","addData");
         this.mDatas.addAll(datas);
+        for (int i = 0; i <mDatas.size(); i++) {
+            int height = new Random().nextInt(200) + 250;//[100,300)的随机数
+            heightList.add(height);
+        }
 
     }
 
