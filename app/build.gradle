@@ -31,6 +31,11 @@ dependencies {
     compile 'io.reactivex:rxandroid:0.24.0'
     //添加retrofit
     compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
+    //一个滑动返回库
+    compile 'me.imid.swipebacklayout.lib:library:1.0.0'
+    //注解绑定
+    compile 'com.jakewharton:butterknife:7.0.1'
+
     compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta4'
 

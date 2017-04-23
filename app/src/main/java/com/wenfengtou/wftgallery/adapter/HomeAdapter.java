@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.wenfengtou.wftgallery.R;
+import com.wenfengtou.wftgallery.activity.PhotoActivity;
 import com.wenfengtou.wftgallery.bean.Result;
 
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         Log.i("wenfeng","onBindViewHolder");
         ViewGroup.LayoutParams layoutParams = holder.imageView.getLayoutParams();
         layoutParams.height = heightList.get(position);
@@ -65,6 +66,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             holder.imageView.setImageResource(R.drawable.yingfei);
 
         }
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PhotoActivity.startActivity((AppCompatActivity) mContext,data.getUrl(),holder.imageView);
+            }
+        });
         holder.textView.setText(data.getDesc());
     }
 
