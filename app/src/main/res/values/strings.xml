@@ -1,4 +1,9 @@
 <resources>
-    <string name="app_name">WftGallery</string>
+    <string name="app_name">微信图库</string>
     <string name="transitions_name">image</string>
+    <string name="beauty_tab">美女</string>
+    <string name="comic_tab">动漫</string>
+    <string name="other_tab">其他</string>
+
+
 </resources>

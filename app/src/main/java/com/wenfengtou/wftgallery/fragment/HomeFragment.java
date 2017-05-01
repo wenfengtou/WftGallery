@@ -33,18 +33,15 @@ public class HomeFragment extends Fragment {
     protected View mContainView;
     RecyclerView mRecyclerView;
     SwipeRefreshLayout mSwipeRefreshLayout;
-    Toolbar mToolBar;
     HomeAdapter mAdapter;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.i("wenfeng","HomeFragment onCreate");
         super.onCreate(savedInstanceState);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.i("wenfeng","HomeFragment onCreateView");
         if(mContainView == null) {
             mContainView = inflater.inflate(R.layout.fragment_meizi, container, false);
         }
@@ -53,12 +50,10 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        Log.i("wenfeng","HomeFragment onViewCreated");
         super.onViewCreated(view, savedInstanceState);
         mAdapter = new HomeAdapter(getActivity());
         mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view);
         mSwipeRefreshLayout =(SwipeRefreshLayout) getActivity().findViewById(R.id.swipe_ly);
-        //mToolBar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,
                 StaggeredGridLayoutManager.VERTICAL));
         mRecyclerView.setHasFixedSize(true);

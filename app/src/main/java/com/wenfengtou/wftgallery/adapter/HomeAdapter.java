@@ -97,6 +97,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.item_img);
             textView = (TextView) itemView.findViewById(R.id.item_title);
+            textView.setVisibility(View.GONE);
         }
     }
 
