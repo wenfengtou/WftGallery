@@ -31,9 +31,9 @@ import rx.schedulers.Schedulers;
 
 public class HomeFragment extends Fragment {
     protected View mContainView;
-    RecyclerView mRecyclerView;
-    SwipeRefreshLayout mSwipeRefreshLayout;
-    HomeAdapter mAdapter;
+    private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private HomeAdapter mAdapter;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

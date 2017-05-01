@@ -18,6 +18,7 @@ import com.wenfengtou.wftgallery.fragment.HomeFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+    private static final String TAG = "MainActivity";
     DrawerLayout mDrawerLayout;
     NavigationView mNavigationView;
     TabLayout mTabLayout;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mCurrentUIIndex = tab.getPosition();
+                Log.i(TAG,"onTabSelected"+mCurrentUIIndex);
                 updateUI();
             }
 
@@ -72,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Fragment mComicFragment;
 
     private void updateUI() {
-        Log.i("wenfeng","updateUI");
+        Log.i(TAG,"updateUI "+mCurrentUIIndex);
         switch (mCurrentUIIndex) {
             case INDEX_HOME:
                 if (mHomeFragment == null) {
@@ -91,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void switchFragment(Fragment fragment) {
-        Log.i("wenfeng","switchFragment");
+        Log.i(TAG,"switchFragment");
         FragmentTransaction fragmentTransaction;
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if (mCurrentFragment != null) {
