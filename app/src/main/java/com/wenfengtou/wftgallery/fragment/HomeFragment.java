@@ -31,9 +31,14 @@ import rx.schedulers.Schedulers;
 
 public class HomeFragment extends Fragment {
     protected View mContainView;
-    private RecyclerView mRecyclerView;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private HomeAdapter mAdapter;
+    RecyclerView mRecyclerView;
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    HomeAdapter mAdapter;
+    StaggeredGridLayoutManager mStaggeredGridLayoutManager;
+    //是否载入更多状态
+    private boolean isLoadingMore = false;
+    //当前页数
+    private int currentPager = 1;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,13 +59,36 @@ public class HomeFragment extends Fragment {
         mAdapter = new HomeAdapter(getActivity());
         mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view);
         mSwipeRefreshLayout =(SwipeRefreshLayout) getActivity().findViewById(R.id.swipe_ly);
-        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,
-                StaggeredGridLayoutManager.VERTICAL));
+        mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2,
+                StaggeredGridLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setAdapter(mAdapter);
-        loadData(1);
+        mRecyclerView.addOnScrollListener(mOnScrollListener);
+        loadData(currentPager);
     }
+
+    int[] lastPositions;
+    private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            //但RecyclerView滑动到倒数第三个之请求加载更多
+            if (lastPositions == null) {
+                Log.i("wenfengtou","getSpanCount"+mStaggeredGridLayoutManager.getSpanCount());
+                lastPositions = new int[mStaggeredGridLayoutManager.getSpanCount()];
+            }
+            int[] lastVisibleItem = mStaggeredGridLayoutManager.findLastVisibleItemPositions(lastPositions);
+            Log.i("wenfengtou","lastVisibleItem[0 1] is "+lastVisibleItem[0]+" "+lastVisibleItem[1]);
+            int totalItemCount = mAdapter.getItemCount();
+            // dy>0 表示向下滑动
+            if (lastVisibleItem[0] >= totalItemCount - 4 && !isLoadingMore && dy > 0 ) {
+                requestMoreData();
+                Log.i("wenfengtou","requestMoreData ");
+            }
+        }
+    };
 
     private void loadData(int pager) {
         Log.i("wenfeng","HomeFragment loadData");
@@ -74,22 +102,30 @@ public class HomeFragment extends Fragment {
                 .subscribe(dataObservable);
     }
 
+    private void requestMoreData(){
+        Log.i("wenfeng","requestMoreData");
+        isLoadingMore = true;
+        loadData(++currentPager);
+    }
+
     private Observer<Data> dataObservable = new Observer<Data>(){
 
         @Override
         public void onCompleted() {
-            Log.i("wenfeng","数据onCompleted 停止刷新");
+            Log.i("wenfeng","onCompleted");
+            isLoadingMore = false;
         }
 
         @Override
         public void onError(Throwable e) {
-            Log.i("wenfeng","onError 停止刷新");
+            Log.i("wenfeng","onError");
            // mSwipeRefreshLayout.setRefreshing(false);
+            isLoadingMore = false;
         }
 
         @Override
         public void onNext(Data data) {
-            Log.i("wenfeng","onNext " + data.toString());
+            Log.i("wenfeng","onNext");
             if(data != null && data.getResults() != null){
                 mAdapter.addData(data.getResults());
                 mAdapter.notifyDataSetChanged();

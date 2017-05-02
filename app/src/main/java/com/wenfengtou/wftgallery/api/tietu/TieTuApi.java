@@ -39,8 +39,7 @@ public class TieTuApi {
         mCallback = callback;
     }
 
-    public void syncGetTietuListByType() {
-        int page = 0;
+    public void syncGetTietuListByType(int page) {
         final String url = TieTuApi.TIETU_TYPE_DONGMAN + page;
         new Thread(new Runnable() {
             @Override
