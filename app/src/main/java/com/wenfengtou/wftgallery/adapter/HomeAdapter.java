@@ -87,7 +87,15 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             int height = new Random().nextInt(200) + 250;//[100,300)的随机数
             heightList.add(height);
         }
+    }
 
+
+    public void setData(List<Result> datas) {
+        this.mDatas = datas;
+        for (int i = 0; i <mDatas.size(); i++) {
+            int height = new Random().nextInt(200) + 250;//[100,300)的随机数
+            heightList.add(height);
+        }
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{

@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/WftGallery.iml" filepath="$PROJECT_DIR$/WftGallery.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/demo/demo.iml" filepath="$PROJECT_DIR$/demo/demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lrucache/lrucache.iml" filepath="$PROJECT_DIR$/lrucache/lrucache.iml" />
     </modules>
   </component>
 </project>
