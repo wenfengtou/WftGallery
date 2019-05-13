@@ -2,6 +2,8 @@ package com.wenfengtou.wftgallery.fragment;
 
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 
 import android.support.v4.app.Fragment;
@@ -9,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -53,6 +56,17 @@ public class HomeFragment extends Fragment  implements  SwipeRefreshLayout.OnRef
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                Log.i("wenfenggc","start gc");
+                System.gc();
+                System.runFinalization();
+                sendEmptyMessageDelayed(1,5000);
+            }
+        };
+      //  handler.sendEmptyMessageDelayed(1,5000);
     }
 
     @Nullable
@@ -68,17 +82,30 @@ public class HomeFragment extends Fragment  implements  SwipeRefreshLayout.OnRef
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAdapter = new HomeAdapter(getActivity());
+
+        mAdapter.setHasStableIds(true);
+
         mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view);
         mSwipeRefreshLayout =(SwipeRefreshLayout) getActivity().findViewById(R.id.swipe_ly);
         mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2,
                 StaggeredGridLayoutManager.VERTICAL);
+        mStaggeredGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+
+        /*
+        RecyclerView.RecycledViewPool pool= new RecyclerView.RecycledViewPool();
+        pool.setMaxRecycledViews(0, 10);
+        mRecyclerView.setRecycledViewPool(pool);
+        */
+        mRecyclerView.setItemViewCacheSize(100);
+
         mRecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        //mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnScrollListener(mOnScrollListener);
         try {
-            Log.i(TAG, "DiskLruCacheManager 创建");
+            Log.i(TAG, "DiskLruCacheManager wenfeng 创建");
             mDiskLruCacheManager = new DiskLruCacheManager(getActivity());
             Data data = mDiskLruCacheManager.getAsSerializable(TAG);
             Log.i(TAG, "DiskLruCacheManager 读取");
@@ -172,13 +199,16 @@ public class HomeFragment extends Fragment  implements  SwipeRefreshLayout.OnRef
             if(data != null && data.getResults() != null){
                 if(isLoadingMore){
                     mAdapter.addData(data.getResults());
+                    mAdapter.notifyDataSetChanged();
                 } else if (isLoadingNewData) {
                     isALlLoad = false;
                     mAdapter.setData(data.getResults());
                     Log.i(TAG, "DiskLruCacheManager 写入");
                     mDiskLruCacheManager.put(TAG,data);
+                    mAdapter.notifyDataSetChanged();
                 }
-                mAdapter.notifyDataSetChanged();
+
+               // mAdapter.notifyItemRangeChanged();
             }
         }
     };

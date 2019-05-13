@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.cache.LruResourceCache;
 import com.wenfengtou.wftgallery.R;
 import com.wenfengtou.wftgallery.activity.PhotoActivity;
 import com.wenfengtou.wftgallery.bean.Result;
@@ -42,26 +43,31 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.meizi_fragment_item, parent, false);
-        Log.i("wenfeng","onCreateViewHolder");
+        Log.i("wenfeng","onCreateViewHolder" + " viewtype :" + view);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Log.i("wenfeng","onBindViewHolder");
+        Log.i("wenfeng","onBindViewHolder pos=" + position);
         ViewGroup.LayoutParams layoutParams = holder.imageView.getLayoutParams();
-        layoutParams.height = heightList.get(position);
+        layoutParams.height = 300;
         layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         holder.imageView.setLayoutParams(layoutParams);
         final Result data = mDatas.get(position);
         if(data.getUrl() != null) {
+            Log.i("wenfeng","Glide.with");
             Glide.with(mContext)
                     .load(data.getUrl())
                    // .error(R.drawable.jay)
-                    .centerCrop()
+                    //.centerCrop()
+                    .dontAnimate()
+            .skipMemoryCache(false)
+                   // .sizeMultiplier(0.1f)
                    // .placeholder(R.drawable.bg_cyan)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.imageView);
+
         }else {
             holder.imageView.setImageResource(R.drawable.yingfei);
 
@@ -73,6 +79,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             }
         });
         holder.textView.setText(data.getDesc());
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
